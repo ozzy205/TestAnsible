@@ -4,6 +4,7 @@
   gather_facts: false
   become: true
 
-- name: Update apt package index
-  ansible.builtin.apt:
-    update_cache: yes
+  tasks:
+    - name: Update apt package index
+      ansible.builtin.apt:
+        update_cache: yes
