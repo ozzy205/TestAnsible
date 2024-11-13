@@ -8,3 +8,4 @@
       become: true
       ansible.builtin.dnf:
         update_cache: yes
+        use_backend: dnf4
