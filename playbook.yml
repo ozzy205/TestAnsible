@@ -3,7 +3,7 @@
   become: true  # Ensure you have the necessary privileges to run the command as root
   tasks:
     - name: Update apt packages
-      ansible.builtin.apt:
+      apt:
         update_cache: yes  # Update the APT package cache
         upgrade: dist      # Upgrade all packages to the latest version
         cache_valid_time: 3600  # Cache is valid for 1 hour
