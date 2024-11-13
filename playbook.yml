@@ -1,6 +1,6 @@
 ---
 - name: Test connectivity to hosts
-  hosts: all
+  hosts: localhost
   gather_facts: false  # Disable gathering facts for a faster playbook execution
 
   tasks:
