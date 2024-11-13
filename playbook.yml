@@ -1,12 +1,8 @@
 ---
-- hosts: all
-  gather_facts: false
-  become: true
-  become_user: root
-  become_method: su
-  
+- name: Test connectivity to hosts
+  hosts: all
+  gather_facts: false  # Disable gathering facts for a faster playbook execution
+
   tasks:
-    - name: Update dnf package index
-      ansible.builtin.dnf:
-        update_cache: yes
-        use_backend: dnf4
+    - name: Ping the host to check connectivity
+      ansible.builtin.ping:
