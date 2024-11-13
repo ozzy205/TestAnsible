@@ -1,8 +1,6 @@
----
-- name: Test connectivity to hosts
-  hosts: localhost
-  gather_facts: false  # Disable gathering facts for a faster playbook execution
-
+- name: Hello World Sample
+  hosts: all
   tasks:
-    - name: Ping the host to check connectivity
-      ansible.builtin.ping:
+    - name: Hello Message
+      debug:
+        msg: "Hello World!"
