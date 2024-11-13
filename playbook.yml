@@ -1,6 +1,5 @@
-- name: Hello World Sample
+- name: Ping Host
   hosts: localhost
   tasks:
-    - name: Hello Message
-      debug:
-        msg: "Hello World!"
+    - name: Ping the host
+      ansible.builtin.ping:
