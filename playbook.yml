@@ -1,5 +1,5 @@
 - name: Update APT
-  hosts: server1
+  hosts: localhost
   gather_facts: false  # Skip gathering facts to speed up execution
   become: true  # Ensure you have the necessary privileges to run the command as root
   tasks:
