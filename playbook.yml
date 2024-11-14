@@ -1,10 +1,10 @@
-- name: Update APT
+- name: Update DNF
   hosts: server1
   gather_facts: false  # Skip gathering facts to speed up execution
   become: true  # Ensure you have the necessary privileges to run the command as root
   tasks:
-    - name: Update apt packages
-      apt:
-        update_cache: yes  # Update the APT package cache
-        upgrade: dist      # Upgrade all packages to the latest version
+    - name: Update DNF packages
+      dnf:
+        update_cache: yes  # Update the DNF package cache
+        upgrade: yes       # Upgrade all packages to the latest version
         cache_valid_time: 3600  # Cache is valid for 1 hour
