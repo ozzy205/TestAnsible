@@ -1,7 +1,7 @@
 [all]
-localhost
+192.168.1.19
 
 [all:vars]
-ansible_connection=local
+ansible_connection=ssh
 ansible_become_user=root
 ansible_become_password=user
