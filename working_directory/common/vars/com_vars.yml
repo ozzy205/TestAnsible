@@ -1,0 +1,86 @@
+---
+# All Rights Reserved, Copy right FUJITSU Limited, 2024
+###############################################################
+# System Name   : Ubuntu Server 24.04.1 LTS
+# Function Name : Infrastructure Construction
+# Program Name  : Upgrade Packages
+# Script Name   : com_vars.yml
+###############################################################
+# ------------------------------------------------------------------------------
+# Argument Description
+#   com_pkg_update_cache: Specifies the packages cache to be upgraded
+#   com_pkg_state : Specifies the state of packages
+#   com_pkg_name : Specifies the name of each packages
+# ------------------------------------------------------------------------------
+# Track Changes:
+#  Edition    Date        Updated By    Changes
+#  01.00   2024/10/03      Fujitsu        New
+#
+################################################################################
+
+### Task Name
+names:
+
+  ### Common task variable name
+  # Set Processing Results
+  result_name01: Flag set result
+  result_name02: Flag renew result
+  result_name03: Check result
+
+  # Argument Check
+  param_check_name01: Check parameter
+  param_check_name02: Invalid parameter
+
+  # Error Skip
+  error_skip_name01: Check skip on error
+
+  # Ansible Stop
+  playbook_stop_name01: "Stop Playbook Execution"
+
+
+  ### Name of each task variable
+  # Command execution
+  command_name01: Include common vars
+  command_name02: Execute command
+  command_name03: Error command
+
+  # SHELL EXECUTION
+  shell_name01: Include common vars
+  shell_name02: Execute shell
+  shell_name03: Error shell
+
+  # REST execution
+  rest_name01: Rest execution
+  rest_name02: Request execution
+  rest_name03: Request execution result
+
+
+  # Upgrade package Success Message
+  upg_pkg_name01: Upgrade individual packages in a list
+  upg_pkg_name02: Upgrade Check Result
+  upg_pkg_name03: Error output if an exception occurs
+
+#### Messages
+messages:
+
+  ### Common task messages
+  # Set Processing Results
+  result_name01: Flag set result
+  result_name02: Flag renew result
+  result_name03: Check result
+
+  # Argument Check
+  param_check_msg01: "Argument Check OK"
+  param_check_msg02: "Argument check NG, stop. "
+
+  # Error Skip
+  error_skip_msg01: "An error occurred, stopping. "
+  error_skip_msg02: "Skipping due to error."
+  
+  # Upgrade Result
+  upg_pkg_msg01: "Upgrade package successful"
+  upg_pkg_msg02: "Failed to upgrade package"
+
+#### Task Fail
+com_const:
+   errskp_fail_only: "Some Task Fails"

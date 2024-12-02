@@ -1,0 +1,42 @@
+---
+# Upgrade Packages
+- name: Upgrade packages tasks
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Start message of playbook
+      ansible.builtin.debug:
+        msg: "Start Playbook"
+
+    - block:
+        # Role call for common parts
+        - ansible.builtin.include_role:
+            name: ../roles/com_pkg_upgrade
+
+        - name: "NORMAL END"
+          ansible.builtin.debug:
+            msg: "NORMAL END"
+
+      rescue:
+        - name: "IN RESCUE"
+          ansible.builtin.debug:
+            msg: "RESCUE IS RUNNING"
+
+      always:
+        - name: "IN ALWAYS"
+          ansible.builtin.debug:
+            msg: "ALWAYS IS RUNNING"
+
+        # Common parts execution result display
+        - name: "RESULT, FLG"
+          ansible.builtin.debug:
+            var: com_result_upg_pkg
+
+        - name: "RESULT, DETAIL"
+          ansible.builtin.debug:
+            var: com_result_detail_upg_pkg
+
+    - name: "END MESSAGE"
+      ansible.builtin.debug:
+        msg: "END PLAYBOOK"

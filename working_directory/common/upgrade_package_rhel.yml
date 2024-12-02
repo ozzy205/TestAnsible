@@ -1,0 +1,137 @@
+---
+# All Rights Reserved, Copy right FUJITSU Limited, 2024
+###############################################################
+# System Name   : Ubuntu Server 24.04.1 LTS
+# Function Name : Infrastructure Construction
+# Program Name  : Upgrade Packages
+# Script Name   : upgrade_package_rhel.yml
+###############################################################
+# ------------------------------------------------------------------------------
+# Argument Description
+#   com_pkg_update_cache: Specifies the packages cache to be upgraded
+#   com_pkg_state : Specifies the state of packages
+#   com_pkg_name : Specifies the name of each packages
+# ------------------------------------------------------------------------------
+# Track Changes:
+#  Edition    Date        Updated By    Changes
+#  01.00   2024/10/03      Fujitsu        New
+#
+################################################################################
+# Read Common Parts Variables
+- name: Include common vars
+  ansible.builtin.include_vars: ../vars/com_vars.yml
+
+# Set result flag
+- name: "Set result flag for {{ names['result_name01'] }}"
+  ansible.builtin.set_fact:
+    com_result_upg_pkg: true
+    com_result_detail_upg_pkg: []
+  when: com_result_upg_pkg is undefined
+
+# Argument Check
+- block:
+
+    # Required arguments, string check
+    - name: "{{ names.param_check_name01 }}: item.com_pkg_name"
+      ansible.builtin.assert:
+        that:
+          - item.com_pkg_name is defined
+          - item.com_pkg_name is string
+          - item.com_pkg_name | length > 0
+        fail_msg: "item.com_pkg_name ={{item.com_pkg_name | default('#undefined#')}}"
+
+    - name: "{{ names.param_check_name01 }}: item.com_pkg_state"
+      ansible.builtin.assert:
+        that:
+          - item.com_pkg_state is defined
+          - item.com_pkg_state is string
+          - item.com_pkg_state | length > 0
+        fail_msg: "item.com_pkg_state ={{item.com_pkg_state | default('#undefined#')}}"
+
+    - name: "{{ names.param_check_name01 }}: com_pkg_update_cache"
+      ansible.builtin.assert:
+        that:
+          - com_pkg_update_cache is defined
+          - com_pkg_update_cache is boolean
+        fail_msg: "com_pkg_update_cache ={{com_pkg_update_cache | default('#undefined#')}}"
+
+# Argument check NG, log and continue
+  rescue:
+    # Update all processing results flags
+    - name: "{{ names['result_name02'] }}"
+      ansible.builtin.set_fact:
+        com_result_upg_pkg: false
+    # fail issue only
+    - name: "{{ messages['error_skip_msg01'] }}"
+      ansible.builtin.fail:
+        msg: "{{ messages['error_skip_msg02'] }}"
+      when:
+        ( com_error_skip | default('') ) == com_const.errskp_fail_only
+
+    # Stop
+    - block:
+        # Stop Message
+        - name: "{{ names.param_check_name02 }}"
+          ansible.builtin.fail:
+            msg: "{{ messages.param_check_msg02 }}"
+      rescue:
+        # Stop
+        - name: "Stop playbook for this host only"
+          ansible.builtin.meta: end_host
+
+# Main Process
+- block:
+
+    - name: "{{ names['upg_pkg_name01'] }}"
+      ansible.builtin.apt:
+        name: "{{ item.com_pkg_name }}"
+        state: "{{ item.com_pkg_state }}"
+        update_cache: "{{ com_pkg_update_cache }}"
+      register: result_upg_pkg
+      become: true
+
+    # Post-Processing
+    # Store the execution result
+    - name: "{{ names['result_name03'] }}"
+      ansible.builtin.set_fact:
+        com_result_detail_upg_pkg: "{{ com_result_detail_upg_pkg | default([]) + [result_upg_pkg] }}"
+
+    # Message output if execution was successful
+    - name: "{{ names['upg_pkg_name02'] }}"
+      ansible.builtin.debug:
+        msg: "{{ messages.upg_pkg_msg01 }}"
+
+  # Error Handling
+  rescue:
+    # Update all processing results flags
+    - name: "{{ names['result_name02'] }}"
+      ansible.builtin.set_fact:
+        com_result_upg_pkg: false
+
+    # Store the result of registration
+    - name: "{{ names['result_name03'] }}"
+      ansible.builtin.set_fact:
+        com_result_detail_upg_pkg: "{{ com_result_detail_upg_pkg | default([]) + [result_upg_pkg] }}"
+
+    - name: "{{ names['upg_pkg_name03'] }}"
+      ansible.builtin.debug:
+        msg: "{{ messages.upg_pkg_msg02 }} {{ item.com_pkg_name }}."
+
+    # fail発行のみ
+    - name: "{{ names.error_skip_name01 }}"
+      ansible.builtin.fail:
+        msg: "{{ messages.error_skip_msg02 }}"
+      when:
+        ( com_error_skip | default('') ) == com_const.errskp_fail_only
+
+    # エラースキップの確認
+    - block:
+        # 停止メッセージ
+        - name: "{{ names.error_skip_name01 }}"
+          ansible.builtin.fail:
+            msg: "{{ messages.error_skip_msg01 }}"
+      rescue:
+        # 停止
+        - name: "Stop playbook for this host only"
+          ansible.builtin.meta: end_host
+      when: not ( com_error_skip | default(false) )

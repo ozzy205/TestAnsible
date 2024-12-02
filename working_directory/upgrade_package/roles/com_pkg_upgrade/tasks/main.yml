@@ -1,0 +1,17 @@
+---
+  # Include common parts
+- name: Include common parts
+  ansible.builtin.include_tasks:
+    file: "../working_directory/common/upgrade_package_rhel.yml"
+  vars:
+    com_error_skip: false
+    com_pkg_update_cache: true
+  loop:
+    - com_pkg_name: cloud-init
+      com_pkg_state: latest
+    - com_pkg_name: python3-distupgrade
+      com_pkg_state: latest
+    - com_pkg_name: ubuntu-release-upgrader-core
+      com_pkg_state: latest
+    - com_pkg_name: ubuntu-release-upgrader-gtk
+      com_pkg_state: latest
